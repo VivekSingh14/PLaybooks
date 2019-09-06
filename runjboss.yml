@@ -1,0 +1,4 @@
+---
+ - hosts: all
+   roles:
+    - /etc/ansible/playbooks/installation

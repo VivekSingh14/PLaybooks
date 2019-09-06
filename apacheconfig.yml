@@ -1,0 +1,19 @@
+---
+  - hosts: all
+    remote_user: root
+    become: true
+    vars:
+     http_port: var1
+     max_clients: var2
+
+  tasks:
+  - name: ensure apache is at the latest version
+    yum:
+       name=httpd 
+       state=latest
+
+  - name: replace default index.html file
+    copy: src=/static_files/index.html dest=/var/www/html/ mode=0644
+    notify:
+    - restart httpd
+ 

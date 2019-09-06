@@ -1,0 +1,28 @@
+---
+  - hosts: all
+    vars_files: 
+      - static_var.yml
+    tasks:
+    - name: Download lib
+      get_url: 
+        url='http://repo.mysql.com/mysql-apt-config_0.1.5-1ubuntu12.04_all.deb'         dest='/usr/mysql/mysql-apt-config_0.1.5-1ubuntu12.04_all.deb'
+    - name: install {{software} 
+      apt:
+         pkg={{software}}-server 
+         state=installed
+    - name: install {{software}}-python
+      apt: 
+         name=MySQL-python 
+         state=present
+    - name: Start SQL service
+      service: 
+         name=mysqld 
+         state=restarted 
+    - name: create database
+      mysql_db: 
+         name=test_db 
+         state=present
+    - name: Mysql Set password 
+      shell: debconf-set-selections <<< 'mysql-server/root_password {{password}} password'
+    - name: mysql| set repassword
+      shell: debconf-set-selections <<< 'mysql-server/root_password_again {{password}} password'

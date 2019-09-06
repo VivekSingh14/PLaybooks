@@ -1,0 +1,54 @@
+---
+  - hosts: all
+    sudo: yes
+    vars_files:
+      - static_var.yml
+    tasks:
+
+    - name: install {{runtime}}
+      yum:
+         name={{runtime}}
+         state=present
+
+    - command: echo {{item}}
+      loop: [0,2,4,6,8,10]
+      when: item > 5
+
+    - name: Install Java JDK rpm from local file
+      yum: 
+         name={{develop}}
+         state=present
+
+    - fail:
+        msg: "Invalid version of {{runtime}}, you are looking for. "
+      when: (java_type != 'openjdk')
+
+#    - name: Download {{soft}}
+#      get_url: url={{source_url}} dest={{dest_url}}
+
+    - name: Extract archive
+      unarchive:
+        dest={{u_dest}} src={{u_src}} creates={{u_crt}} copy=no
+
+    - name: Rename install directory
+      command: 
+         chdir=/usr/share /bin/mv wildfly-15.0.1.Final jboss-as 
+         creates=/usr/share/jboss-as
+
+#    - name: copying standalone.xml 
+#      template: src={{src_s}} dest={{dest_s}} remote_src=yes
+#      notify: restart jboss
+
+    - name: add group "{{soft}}"
+      group: name={{soft}}
+
+    - name: add user "{{soft}}"
+      user: name={{soft}} group={{soft}} home=/usr/share/jboss-as
+
+    - name: change the ownership of installation
+      file: path={{f_ins}} owner=jboss group=jboss state=directory recurse=yes
+
+#    - name: copy init script
+#      copy: src=wildfly-init-redhat.sh dest=/etc/init.d/jboss remote_source=yes mode=0755
+#    - name: enable wildfly to be started boot
+#      service: name=jboss enabled=yes state=started

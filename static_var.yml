@@ -1,0 +1,20 @@
+---
+runtime: jre
+develop: java-1.8.0-openjdk
+source_url: https://download.jboss.org/wildfly/15.0.1.Final/wildfly-15.0.1.Final.zip
+dest_url: /usr/jboss/
+## this is for unarchive
+u_dest: /usr/share/
+u_src: /usr/jboss/wildfly-15.0.1.Final.zip
+u_crt: /usr/share/jboss-as
+
+f_ins: /usr/share/jboss-as
+
+java_type: openjdk
+java_version: 8
+java_debian_oracle_accept_licence: no
+src_s: /usr/share/jboss-as/standalone/configuration/standalone.xml
+dest_s: /usr/share/jboss-as/standalone/configuration/
+java_type: openjdk
+chadir_d: /usr/share /bin/mv wildfly-15.0.1.Final jboss-as
+soft: jboss

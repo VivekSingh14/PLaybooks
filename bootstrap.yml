@@ -1,0 +1,11 @@
+---
+- hosts: all
+  remote_user: root
+  become: true
+
+  tasks:
+  - name: install {{my_var}}
+    yum:
+       name: "{{my_var}}"
+       state: latest
+
